@@ -120,3 +120,104 @@ After developing and testing your API, the next step is to update your GitHub re
 1. **Once you've configured your project settings, click on the 'Deploy' button at the bottom of the page.**
 2. **Vercel will then begin the deployment process. You can monitor the progress in the 'Deployments' tab of your Vercel dashboard.**
 3. **When the deployment is complete, Vercel will provide a URL where your deployed project is accessible.**
+
+### Creating an OpenAPI Schema for Your API
+
+After deploying your API on Vercel, the next step is to create an OpenAPI schema. This schema will help in defining the endpoints, parameters, and responses of your API in a standardized format. Here's how you can create an OpenAPI schema for the Stock Data API.
+
+#### Step 1: Define the OpenAPI Schema
+
+1. **Start by defining the basic structure of your OpenAPI schema as follows:**
+
+   ```json
+   {
+     "openapi": "3.1.0",
+     "info": {
+       "title": "Stock Data API",
+       "description": "Retrieves open, high, low, and close prices of a specified stock symbol.",
+       "version": "v1.0.0"
+     },
+     "servers": [
+       {
+         "url": "https://vercel-api-stock-ticker.vercel.app/"
+       }
+     ],
+     "paths": {
+       "/{symbol}": {
+         "get": {
+           "description": "Get stock data for a specific symbol",
+           "operationId": "GetStockData",
+           "parameters": [
+             {
+               "name": "symbol",
+               "in": "path",
+               "description": "The stock symbol to retrieve data for (e.g., 'AAPL' for Apple Inc.)",
+               "required": true,
+               "schema": {
+                 "type": "string"
+               }
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "Successful response",
+               "content": {
+                 "application/json": {
+                   "schema": {
+                     "$ref": "#/components/schemas/StockData"
+                   }
+                 }
+               }
+             },
+             "404": {
+               "description": "Data not found for the given symbol"
+             }
+           },
+           "deprecated": false
+         }
+       }
+     },
+     "components": {
+       "schemas": {
+         "StockData": {
+           "type": "object",
+           "properties": {
+             "symbol": {
+               "type": "string",
+               "description": "Stock symbol"
+             },
+             "open": {
+               "type": "number",
+               "format": "float",
+               "description": "Opening price"
+             },
+             "high": {
+               "type": "number",
+               "format": "float",
+               "description": "Highest price during the day"
+             },
+             "low": {
+               "type": "number",
+               "format": "float",
+               "description": "Lowest price during the day"
+             },
+             "close": {
+               "type": "number",
+               "format": "float",
+               "description": "Closing price"
+             }
+           }
+         }
+       }
+     }
+   }
+
+   Replace the content of the schema.txt file in your project with the above JSON schema.
+####Step 2: Using ChatGPT to Create a New GPT with the Schema
+Go back to the ChatGPT interface.
+Click on 'Explore' in ChatGPT.
+Choose 'Create new GPT'.
+Click on 'Add Action'.
+Paste the entire OpenAPI schema into the input box.
+
+Now your API is ready!
